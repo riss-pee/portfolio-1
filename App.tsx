@@ -15,21 +15,30 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate initial loading
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1200);
     return () => clearTimeout(timer);
   }, []);
 
+  const springConfig = { type: "spring", stiffness: 260, damping: 20 };
+
   return (
-    <div className="min-h-screen selection:bg-indigo-100 selection:text-indigo-700">
+    <div className="min-h-screen selection:bg-indigo-100 selection:text-indigo-700 relative">
+      {/* Liquid Background Elements */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-200/40 rounded-full blur-[120px] animate-blob"></div>
+        <div className="absolute top-[20%] right-[-5%] w-[40%] h-[40%] bg-purple-200/30 rounded-full blur-[100px] animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[50%] bg-pink-100/40 rounded-full blur-[120px] animate-blob animation-delay-4000"></div>
+        <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-blue-100/30 rounded-full blur-[80px] animate-blob"></div>
+      </div>
+
       <AnimatePresence>
         {loading ? (
           <motion.div
             key="loader"
             className="fixed inset-0 z-50 flex items-center justify-center bg-white"
-            exit={{ opacity: 0, transition: { duration: 0.5 } }}
+            exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)", transition: { duration: 0.6, ease: "easeInOut" } }}
           >
             <motion.div 
               initial={{ scale: 0.8, opacity: 0 }}
@@ -37,26 +46,26 @@ const App: React.FC = () => {
               transition={{ repeat: Infinity, duration: 1, repeatType: "reverse" }}
               className="flex flex-col items-center"
             >
-              <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-              <p className="mt-4 text-indigo-600 font-medium tracking-widest uppercase text-xs">RC Portfolio</p>
+              <div className="w-16 h-16 border-[6px] border-indigo-50 border-t-indigo-600 rounded-full animate-spin shadow-inner"></div>
+              <p className="mt-6 text-indigo-600 font-bold tracking-[0.3em] uppercase text-[10px]">Processing Reality</p>
             </motion.div>
           </motion.div>
         ) : (
           <motion.main
             key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...springConfig, duration: 0.8 }}
             className="relative"
           >
             <Navbar />
             <section id="hero"><Hero /></section>
-            <section id="about" className="py-20"><About /></section>
-            <section id="skills" className="py-20 bg-slate-50/50"><Skills /></section>
-            <section id="projects" className="py-20"><Projects /></section>
-            <section id="experience" className="py-20 bg-slate-50/50"><Experience /></section>
-            <section id="certifications" className="py-20"><Certifications /></section>
-            <section id="contact" className="py-20 bg-white"><Contact /></section>
+            <section id="about" className="py-24"><About /></section>
+            <section id="skills" className="py-24 relative"><Skills /></section>
+            <section id="projects" className="py-24"><Projects /></section>
+            <section id="experience" className="py-24 relative"><Experience /></section>
+            <section id="certifications" className="py-24"><Certifications /></section>
+            <section id="contact" className="py-24"><Contact /></section>
             <Footer />
           </motion.main>
         )}

@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, Folder } from 'lucide-react';
+import { ExternalLink, Github, Folder, ArrowUpRight } from 'lucide-react';
 import { PROJECTS_DATA } from '../constants';
 
 const Projects: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const categories = ['All', ...Array.from(new Set(PROJECTS_DATA.map(p => p.category)))];
+  const spring = { type: "spring", stiffness: 300, damping: 30 };
 
   const filteredProjects = filter === 'All' 
     ? PROJECTS_DATA 
@@ -14,18 +15,24 @@ const Projects: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6">
-      <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-8">
+      <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
         <div>
-          <h2 className="text-sm font-bold tracking-[0.2em] text-indigo-600 uppercase mb-2">Portfolio</h2>
-          <h3 className="text-4xl font-bold text-slate-900">Featured Projects</h3>
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-[10px] font-black tracking-[0.4em] text-indigo-600 uppercase mb-4"
+          >
+            Featured Work
+          </motion.h2>
+          <h3 className="text-5xl font-black text-slate-900 tracking-tighter">Liquid Projects</h3>
         </div>
-        <div className="flex flex-wrap gap-2 p-1 bg-slate-100/50 rounded-xl glass">
+        <div className="flex flex-wrap gap-2 p-2 glass rounded-[2rem] shadow-inner">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                filter === cat ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-900'
+              className={`px-6 py-3 rounded-full text-xs font-bold transition-all duration-300 ${
+                filter === cat ? 'bg-indigo-600 shadow-lg text-white scale-105' : 'text-slate-500 hover:text-slate-900 hover:bg-white/40'
               }`}
             >
               {cat}
@@ -34,58 +41,63 @@ const Projects: React.FC = () => {
         </div>
       </div>
 
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <AnimatePresence mode='popLayout'>
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, idx) => (
             <motion.div
               key={project.title}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="group glass rounded-3xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-indigo-50/50 transition-all flex flex-col"
+              transition={{ ...spring, delay: idx * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group glass rounded-[2.5rem] overflow-hidden shadow-2xl shadow-indigo-900/5 border-white/60 flex flex-col h-full"
             >
-              <div className="relative aspect-video overflow-hidden">
+              <div className="relative aspect-[4/3] overflow-hidden p-3">
                 <img 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover rounded-[2rem] group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 flex gap-2">
-                  <span className="bg-white/90 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded-full text-slate-800 shadow-sm">
-                    {project.category}
-                  </span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-[2rem] m-3 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute top-6 right-6">
+                  <div className="p-3 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl text-indigo-600 rotate-12 group-hover:rotate-0 transition-transform">
+                    <ArrowUpRight size={20} />
+                  </div>
                 </div>
               </div>
               
-              <div className="p-6 flex-1 flex flex-col">
-                <h4 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">{project.title}</h4>
-                <p className="text-sm text-slate-500 mb-6 flex-1 line-clamp-3 leading-relaxed">
+              <div className="p-8 flex-1 flex flex-col">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500 px-3 py-1 bg-indigo-50 rounded-full">
+                    {project.category}
+                  </span>
+                </div>
+                <h4 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">{project.title}</h4>
+                <p className="text-sm text-slate-500 mb-6 flex-1 font-medium leading-relaxed line-clamp-2">
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-6">
+                
+                <div className="flex flex-wrap gap-2 mb-8">
                   {project.tech.map(t => (
-                    <span key={t} className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded uppercase border border-slate-100">
+                    <span key={t} className="text-[9px] font-black text-slate-500 bg-white/60 px-3 py-1.5 rounded-xl uppercase border border-white">
                       {t}
                     </span>
                   ))}
                 </div>
-                <div className="flex items-center gap-4 border-t border-slate-50 pt-4 mt-auto">
+
+                <div className="flex items-center gap-6 pt-6 border-t border-white/60">
                   {project.github && (
-                    <a href={project.github} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors">
-                      <Github size={14} /> Source
+                    <a href={project.github} className="flex items-center gap-2 text-xs font-black text-slate-600 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+                      <Github size={16} /> Code
                     </a>
                   )}
                   {project.live && (
-                    <a href={project.live} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors">
-                      <ExternalLink size={14} /> Demo
+                    <a href={project.live} className="flex items-center gap-2 text-xs font-black text-slate-600 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+                      <ExternalLink size={16} /> Live
                     </a>
                   )}
-                  <div className="ml-auto text-slate-300">
-                    <Folder size={16} />
-                  </div>
                 </div>
               </div>
             </motion.div>
