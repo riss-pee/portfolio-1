@@ -9,12 +9,16 @@ const Hero: React.FC = () => {
   const [isProjectsLoading, setIsProjectsLoading] = useState(false);
   const [isResumeLoading, setIsResumeLoading] = useState(false);
 
-  const handleAction = (setter: React.Dispatch<React.SetStateAction<boolean>>, href?: string) => {
+  const handleAction = (setter: React.Dispatch<React.SetStateAction<boolean>>, href: string) => {
     setter(true);
+    // Simulate a brief "processing" delay for aesthetic feedback
     setTimeout(() => {
       setter(false);
-      if (href) window.location.hash = href;
-    }, 1000);
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 800);
   };
 
   return (
@@ -30,7 +34,7 @@ const Hero: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-bright text-indigo-700 text-[10px] font-black uppercase tracking-[0.2em] mb-8 border-white shadow-sm"
           >
             <Sparkles size={14} className="animate-pulse" />
-            MCA Student • Full-Stack Dev
+            {PERSONAL_INFO.role}
           </motion.div>
           
           <motion.h1 
@@ -52,18 +56,18 @@ const Hero: React.FC = () => {
             <motion.button 
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => handleAction(setIsProjectsLoading, 'projects')}
-              className="px-10 py-5 bg-indigo-600 text-white rounded-[2rem] font-bold shadow-2xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all flex items-center gap-3 group min-w-[200px] justify-center"
+              onClick={() => handleAction(setIsProjectsLoading, '#projects')}
+              className="px-10 py-5 bg-indigo-600 text-white rounded-[2rem] font-bold shadow-2xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all flex items-center gap-3 group min-w-[220px] justify-center"
             >
-              {isProjectsLoading ? <Loader2 className="animate-spin" size={20} /> : <>Projects <ChevronRight className="group-hover:translate-x-1 transition-transform" /></>}
+              {isProjectsLoading ? <Loader2 className="animate-spin" size={20} /> : <>View Projects <ChevronRight className="group-hover:translate-x-1 transition-transform" /></>}
             </motion.button>
             <motion.button 
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => handleAction(setIsResumeLoading)}
-              className="px-10 py-5 glass-bright text-slate-800 rounded-[2rem] font-bold border-white/80 hover:bg-white/90 transition-all flex items-center gap-3 shadow-lg min-w-[180px] justify-center"
+              onClick={() => handleAction(setIsResumeLoading, '#experience')}
+              className="px-10 py-5 glass-bright text-slate-800 rounded-[2rem] font-bold border-white/80 hover:bg-white/90 transition-all flex items-center gap-3 shadow-lg min-w-[220px] justify-center"
             >
-              {isResumeLoading ? <Loader2 className="animate-spin" size={20} /> : <><Download size={20} /> CV</>}
+              {isResumeLoading ? <Loader2 className="animate-spin" size={20} /> : <><Download size={20} /> Download Resume</>}
             </motion.button>
           </div>
         </motion.div>

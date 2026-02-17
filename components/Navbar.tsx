@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
         transition={spring}
         className={`pointer-events-auto flex items-center justify-between px-8 py-4 rounded-[2.5rem] transition-all duration-500 ${scrolled ? 'glass shadow-2xl shadow-indigo-500/10' : 'bg-transparent'}`}
       >
-        <a href="#hero" className="text-2xl font-black bg-gradient-to-br from-indigo-700 to-violet-700 bg-clip-text text-transparent tracking-tighter">
+        <a href="#hero" className="text-2xl font-black bg-gradient-to-br from-indigo-700 to-violet-700 bg-clip-text text-transparent tracking-tighter hover:scale-105 transition-transform">
           RC.
         </a>
 
