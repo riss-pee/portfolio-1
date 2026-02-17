@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Linkedin, MapPin, Send, Github } from 'lucide-react';
+import { Mail, Phone, Linkedin, MapPin, Send, Github, Loader2 } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 
 const Contact: React.FC = () => {
@@ -13,6 +13,7 @@ const Contact: React.FC = () => {
     message: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     githubUrl: ''
   });
@@ -35,13 +36,30 @@ const Contact: React.FC = () => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (errors.githubUrl) return;
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      alert("Message sent! (Simulation)");
+    }, 1500);
+  };
+
   const inputClasses = "w-full px-6 py-4 rounded-2xl bg-white/50 border border-slate-100 outline-none transition-all duration-300 placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 focus:shadow-[0_0_20px_rgba(99,102,241,0.1)]";
 
   return (
     <div className="max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
         <h2 className="text-sm font-bold tracking-[0.2em] text-indigo-600 uppercase mb-2">Let's Talk</h2>
-        <h3 className="text-4xl font-bold text-slate-900">Get In Touch</h3>
+        <motion.h3 
+          whileHover={{ scale: 1.02, y: -2 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          className="text-4xl font-bold text-slate-900 cursor-default"
+        >
+          Get In Touch
+        </motion.h3>
         <p className="mt-4 text-slate-500 max-w-xl mx-auto">
           Currently open to internships and collaborative projects. Feel free to reach out via any of the channels below.
         </p>
@@ -121,7 +139,7 @@ const Contact: React.FC = () => {
         >
           <div className="glass p-10 rounded-3xl border border-slate-100 h-full">
             <h4 className="text-2xl font-bold text-slate-900 mb-8">Send a Message</h4>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Name</label>
@@ -198,20 +216,20 @@ const Contact: React.FC = () => {
                 ></textarea>
               </div>
               <motion.button 
-                whileHover={!errors.githubUrl ? { 
+                whileHover={!errors.githubUrl && !isSubmitting ? { 
                   scale: 1.02, 
                   y: -2,
                   boxShadow: "0 20px 25px -5px rgba(79, 70, 229, 0.2), 0 8px 10px -6px rgba(79, 70, 229, 0.2)" 
                 } : {}}
-                whileTap={!errors.githubUrl ? { scale: 0.98 } : {}}
-                disabled={!!errors.githubUrl}
+                whileTap={!errors.githubUrl && !isSubmitting ? { scale: 0.98 } : {}}
+                disabled={!!errors.githubUrl || isSubmitting}
                 className={`w-full py-4 font-bold rounded-2xl shadow-xl flex items-center justify-center gap-3 transition-all duration-300 ${
-                  errors.githubUrl 
+                  (errors.githubUrl || isSubmitting)
                   ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none' 
                   : 'bg-indigo-600 text-white shadow-indigo-100/50 hover:bg-indigo-700'
                 }`}
               >
-                Send Message <Send size={20} />
+                {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <>Send Message <Send size={20} /></>}
               </motion.button>
             </form>
           </div>

@@ -24,7 +24,13 @@ const Projects: React.FC = () => {
           >
             Featured Work
           </motion.h2>
-          <h3 className="text-5xl font-black text-slate-900 tracking-tighter">Liquid Projects</h3>
+          <motion.h3 
+            whileHover={{ scale: 1.02, x: 5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="text-5xl font-black text-slate-900 tracking-tighter cursor-default"
+          >
+            Liquid Projects
+          </motion.h3>
         </div>
         <div className="flex flex-wrap gap-2 p-2 glass rounded-[2rem] shadow-inner">
           {categories.map((cat) => (

@@ -10,7 +10,13 @@ const Experience: React.FC = () => {
       <div className="flex flex-col md:flex-row items-center justify-between mb-16">
         <div>
           <h2 className="text-sm font-bold tracking-[0.2em] text-indigo-600 uppercase mb-2">Experience</h2>
-          <h3 className="text-4xl font-bold text-slate-900">Internships & Professional Growth</h3>
+          <motion.h3 
+            whileHover={{ scale: 1.02, x: 5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="text-4xl font-bold text-slate-900 cursor-default"
+          >
+            Internships & Professional Growth
+          </motion.h3>
         </div>
       </div>
 

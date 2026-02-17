@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -13,6 +13,13 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const { scrollY } = useScroll();
+
+  // Parallax transforms for background blobs
+  const y1 = useTransform(scrollY, [0, 5000], [0, 800]);
+  const y2 = useTransform(scrollY, [0, 5000], [0, -500]);
+  const y3 = useTransform(scrollY, [0, 5000], [0, 300]);
+  const y4 = useTransform(scrollY, [0, 5000], [0, -200]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,12 +32,12 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen selection:bg-indigo-100 selection:text-indigo-700 relative">
-      {/* Liquid Background Elements */}
+      {/* Liquid Parallax Background Elements */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-200/40 rounded-full blur-[120px] animate-blob"></div>
-        <div className="absolute top-[20%] right-[-5%] w-[40%] h-[40%] bg-purple-200/30 rounded-full blur-[100px] animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[50%] bg-pink-100/40 rounded-full blur-[120px] animate-blob animation-delay-4000"></div>
-        <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-blue-100/30 rounded-full blur-[80px] animate-blob"></div>
+        <motion.div style={{ y: y1 }} className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-200/40 rounded-full blur-[120px] animate-blob"></motion.div>
+        <motion.div style={{ y: y2 }} className="absolute top-[20%] right-[-5%] w-[40%] h-[40%] bg-purple-200/30 rounded-full blur-[100px] animate-blob animation-delay-2000"></motion.div>
+        <motion.div style={{ y: y3 }} className="absolute bottom-[-10%] left-[20%] w-[60%] h-[50%] bg-pink-100/40 rounded-full blur-[120px] animate-blob animation-delay-4000"></motion.div>
+        <motion.div style={{ y: y4 }} className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-blue-100/30 rounded-full blur-[80px] animate-blob"></motion.div>
       </div>
 
       <AnimatePresence>

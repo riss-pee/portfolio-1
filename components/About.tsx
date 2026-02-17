@@ -10,7 +10,13 @@ const About: React.FC = () => {
       <div className="flex flex-col md:flex-row items-center justify-between mb-16">
         <div>
           <h2 className="text-sm font-bold tracking-[0.2em] text-indigo-600 uppercase mb-2">About Me</h2>
-          <h3 className="text-4xl font-bold text-slate-900">Background & Education</h3>
+          <motion.h3 
+            whileHover={{ scale: 1.02, x: 5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="text-4xl font-bold text-slate-900 cursor-default"
+          >
+            Background & Education
+          </motion.h3>
         </div>
         <div className="hidden md:flex gap-6 mt-4 md:mt-0">
           <div className="flex items-center gap-2 text-slate-500 text-sm">

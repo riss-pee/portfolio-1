@@ -10,7 +10,13 @@ const Skills: React.FC = () => {
     <div className="max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
         <h2 className="text-sm font-bold tracking-[0.2em] text-indigo-600 uppercase mb-2">My Toolkit</h2>
-        <h3 className="text-4xl font-bold text-slate-900">Technical Proficiency</h3>
+        <motion.h3 
+          whileHover={{ scale: 1.02, y: -2 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          className="text-4xl font-bold text-slate-900 cursor-default"
+        >
+          Technical Proficiency
+        </motion.h3>
         <p className="mt-4 text-slate-500 max-w-2xl mx-auto">
           Equipped with a diverse set of technologies, ranging from robust backend systems to modern, responsive frontend frameworks.
         </p>

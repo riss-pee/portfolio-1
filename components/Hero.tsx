@@ -1,11 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, Download, Terminal, Sparkles } from 'lucide-react';
+import { ChevronRight, Download, Terminal, Sparkles, Loader2 } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 
 const Hero: React.FC = () => {
   const spring = { type: "spring", stiffness: 200, damping: 20 };
+  const [isProjectsLoading, setIsProjectsLoading] = useState(false);
+  const [isResumeLoading, setIsResumeLoading] = useState(false);
+
+  const handleAction = (setter: React.Dispatch<React.SetStateAction<boolean>>, href?: string) => {
+    setter(true);
+    setTimeout(() => {
+      setter(false);
+      if (href) window.location.hash = href;
+    }, 1000);
+  };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
@@ -23,32 +33,37 @@ const Hero: React.FC = () => {
             MCA Student • Full-Stack Dev
           </motion.div>
           
-          <h1 className="text-6xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter">
+          <motion.h1 
+            whileHover={{ scale: 1.02, x: 5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="text-6xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter cursor-default"
+          >
             Creative <br />
             <span className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
               Developer
             </span>
-          </h1>
+          </motion.h1>
           
           <p className="mt-8 text-xl text-slate-500 max-w-lg leading-relaxed font-medium">
             Bridging hardware and software with fluid design. Based in {PERSONAL_INFO.location}.
           </p>
           
           <div className="mt-12 flex flex-wrap gap-5">
-            <motion.a 
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              href="#projects" 
-              className="px-10 py-5 bg-indigo-600 text-white rounded-[2rem] font-bold shadow-2xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all flex items-center gap-3 group"
-            >
-              Projects <ChevronRight className="group-hover:translate-x-1 transition-transform" />
-            </motion.a>
             <motion.button 
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 py-5 glass-bright text-slate-800 rounded-[2rem] font-bold border-white/80 hover:bg-white/90 transition-all flex items-center gap-3 shadow-lg"
+              onClick={() => handleAction(setIsProjectsLoading, 'projects')}
+              className="px-10 py-5 bg-indigo-600 text-white rounded-[2rem] font-bold shadow-2xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all flex items-center gap-3 group min-w-[200px] justify-center"
             >
-              <Download size={20} /> CV
+              {isProjectsLoading ? <Loader2 className="animate-spin" size={20} /> : <>Projects <ChevronRight className="group-hover:translate-x-1 transition-transform" /></>}
+            </motion.button>
+            <motion.button 
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleAction(setIsResumeLoading)}
+              className="px-10 py-5 glass-bright text-slate-800 rounded-[2rem] font-bold border-white/80 hover:bg-white/90 transition-all flex items-center gap-3 shadow-lg min-w-[180px] justify-center"
+            >
+              {isResumeLoading ? <Loader2 className="animate-spin" size={20} /> : <><Download size={20} /> CV</>}
             </motion.button>
           </div>
         </motion.div>
